@@ -97,14 +97,39 @@
     .insight { padding: 16px; border-radius: 20px; background: rgba(101,240,180,.08); border: 1px solid rgba(101,240,180,.17); color: #e9fff5; line-height: 1.5; }
     .founder-note { margin-top: 16px; padding: 18px; border-radius: 22px; border: 1px solid rgba(255,210,138,.20); background: rgba(255,210,138,.09); color: #fff3de; line-height: 1.55; }
     .export-box { white-space: pre-wrap; color: var(--muted); background: rgba(0,0,0,.24); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-top: 18px; font-size: 13px; line-height: 1.45; }
+
+    .avatar-stage { display: grid; grid-template-columns: .92fr 1.08fr; gap: 18px; align-items: stretch; }
+    .character-card, .intro-chat { border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); box-shadow: 0 24px 70px rgba(0,0,0,.16); overflow: hidden; }
+    .character-card { position: relative; min-height: 560px; display: grid; place-items: end center; padding: 28px; background: radial-gradient(circle at 50% 20%, rgba(255,143,183,.22), transparent 22rem), linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035)); }
+    .avatar-glow { position: absolute; width: 310px; height: 310px; border-radius: 50%; background: radial-gradient(circle, rgba(255,79,154,.42), transparent 64%); filter: blur(8px); top: 72px; }
+    .luna-avatar { position: relative; width: min(330px, 82vw); height: 430px; display: grid; place-items: center; }
+    .hair { position: absolute; top: 35px; width: 210px; height: 250px; border-radius: 48% 48% 44% 44%; background: linear-gradient(135deg, #2b162a, #5b274a 58%, #9c3d75); box-shadow: inset -24px -20px 40px rgba(0,0,0,.22); }
+    .face { position: absolute; top: 82px; width: 150px; height: 178px; border-radius: 48% 48% 46% 46%; background: linear-gradient(180deg, #ffd4c7, #c98276); box-shadow: inset 0 -16px 28px rgba(100,38,70,.18); }
+    .eye { position: absolute; top: 72px; width: 13px; height: 13px; border-radius: 50%; background: #2a1321; box-shadow: 0 0 0 5px rgba(255,255,255,.18); }
+    .eye.left { left: 42px; } .eye.right { right: 42px; }
+    .smile { position: absolute; top: 115px; left: 55px; width: 42px; height: 22px; border-bottom: 3px solid #7d2442; border-radius: 0 0 999px 999px; }
+    .body-shape { position: absolute; bottom: 20px; width: 250px; height: 205px; border-radius: 48px 48px 34px 34px; background: linear-gradient(135deg, var(--pink), var(--violet)); box-shadow: 0 28px 70px rgba(255,79,154,.20); }
+    .neck { position: absolute; top: 245px; width: 58px; height: 58px; border-radius: 0 0 22px 22px; background: linear-gradient(180deg, #c98276, #a76271); z-index: 1; }
+    .face, .body-shape, .neck { z-index: 2; }
+    .avatar-caption { position: relative; z-index: 3; width: 100%; padding: 18px; border-radius: 22px; background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(12px); }
+    .avatar-caption b { display: block; font-size: 20px; margin-bottom: 6px; }
+    .avatar-caption span { color: var(--muted); line-height: 1.45; font-size: 14px; }
+    .intro-chat { padding: clamp(24px, 4vw, 38px); }
+    .luna-line { padding: 18px; border-radius: 22px; background: rgba(255,255,255,.07); border: 1px solid var(--line); color: #ffe8f1; line-height: 1.55; margin-bottom: 18px; }
+    .identity-grid { display: grid; grid-template-columns: 1fr 110px; gap: 12px; }
+    .identity-grid input, .identity-grid select { width: 100%; min-height: 52px; color: var(--ink); background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 18px; padding: 0 15px; outline: none; }
+    .identity-grid select { appearance: none; }
+    .identity-grid .wide { grid-column: 1 / -1; }
+    .avatar-response { margin-top: 16px; min-height: 92px; padding: 18px; border-radius: 22px; border: 1px solid rgba(101,240,180,.18); background: rgba(101,240,180,.08); color: #e9fff5; line-height: 1.55; }
+
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .small-card { padding: 20px; border: 1px solid var(--line); background: rgba(255,255,255,.06); border-radius: 24px; }
     .small-card b { display: block; font-size: 18px; margin-bottom: 8px; }
     .small-card span { color: var(--muted); line-height: 1.45; font-size: 14px; }
     footer { margin-top: 56px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 22px; display: flex; justify-content: space-between; gap: 18px; font-size: 13px; }
     @keyframes pulse { 70% { box-shadow: 0 0 0 11px rgba(101,240,180,0); } 100% { box-shadow: 0 0 0 0 rgba(101,240,180,0); } }
-    @media (max-width: 900px) { .hero, .survey-shell { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } .grid-3 { grid-template-columns: 1fr; } }
-    @media (max-width: 560px) { .hero-actions, .step-actions, footer { flex-direction: column; } button, .btn { width: 100%; } .nav .pill { display:none; } }
+    @media (max-width: 900px) { .hero, .survey-shell, .avatar-stage { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .hero-actions, .step-actions, footer, .identity-grid { flex-direction: column; } .identity-grid { display: grid; grid-template-columns: 1fr; } button, .btn { width: 100%; } .nav .pill { display:none; } }
   </style>
 </head>
 <body>
@@ -120,7 +145,7 @@
         <h1>Find out what men would actually pay for before building the bot.</h1>
         <p class="lede">A quick 4-question survey for the WingGirl AI idea: a virtual female companion that helps men feel less lonely, practice conversation, and build real confidence with women.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#survey">Run the survey</a>
+          <a class="btn primary" href="#avatar-intro">Talk to Luna</a>
           <a class="btn secondary" href="#how-to-use">How Chris can use it</a>
         </div>
       </div>
@@ -139,6 +164,59 @@
         </div>
       </div>
     </header>
+
+
+
+    <section id="avatar-intro">
+      <div class="section-head">
+        <div class="kicker">Meet the avatar</div>
+        <h2>Luna appears on screen and starts the customer conversation.</h2>
+        <p>This is the first interaction before the survey: the character asks for full name, age, and cultural background so the experience feels personal from the first moment.</p>
+      </div>
+      <div class="avatar-stage">
+        <div class="character-card" aria-label="Luna avatar character">
+          <div class="avatar-glow"></div>
+          <div class="luna-avatar">
+            <div class="hair"></div>
+            <div class="neck"></div>
+            <div class="body-shape"></div>
+            <div class="face">
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="smile"></div>
+            </div>
+          </div>
+          <div class="avatar-caption">
+            <b>Luna · Virtual confidence guide</b>
+            <span>Warm, playful, and direct. She learns who the user is before asking deeper questions.</span>
+          </div>
+        </div>
+        <div class="intro-chat">
+          <div class="luna-line" id="lunaPrompt">Hi, I’m Luna. Before we talk about women, confidence, or dating, I want to know who I’m speaking with. What’s your full name, age, and culture?</div>
+          <div class="identity-grid">
+            <input id="fullName" class="wide" type="text" placeholder="Full name" aria-label="Full name" />
+            <input id="age" type="text" inputmode="numeric" placeholder="Age" aria-label="Age" />
+            <select id="culture" aria-label="Culture">
+              <option value="">Culture</option>
+              <option>Latin / Hispanic</option>
+              <option>Australian</option>
+              <option>European</option>
+              <option>Middle Eastern</option>
+              <option>Asian</option>
+              <option>African</option>
+              <option>Mixed culture</option>
+              <option>Other</option>
+            </select>
+            <input id="cultureOther" class="wide" type="text" placeholder="Optional: describe your background in your own words" aria-label="Describe culture" />
+          </div>
+          <div class="step-actions">
+            <span></span>
+            <button class="primary" type="button" onclick="startAvatarConversation()">Start conversation</button>
+          </div>
+          <div class="avatar-response" id="avatarResponse">Luna’s reply will appear here.</div>
+        </div>
+      </div>
+    </section>
 
     <section id="how-to-use">
       <div class="section-head">
@@ -278,6 +356,24 @@
     function prevStep() { step = Math.max(1, step - 1); showStep(); }
     function val(name) { return new FormData(form).get(name) || 'Not answered'; }
     function note(name) { return (new FormData(form).get(name) || '').trim(); }
+
+
+
+    function startAvatarConversation() {
+      const fullName = document.getElementById('fullName').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const culture = document.getElementById('culture').value;
+      const cultureOther = document.getElementById('cultureOther').value.trim();
+      const response = document.getElementById('avatarResponse');
+      if (!fullName || !age || (!culture && !cultureOther)) {
+        response.textContent = 'Tell me your full name, age, and culture first. I want to make this feel personal, not generic.';
+        return;
+      }
+      const background = cultureOther || culture;
+      response.innerHTML = `<strong>Nice to meet you, ${fullName}.</strong><br><br>You’re ${age}, with a ${background} background. I’ll keep that context in mind — not to stereotype you, but to understand your world better. Now I’m going to ask 4 questions to learn what you need most: confidence, texting help, emotional support, or real practice talking to women.`;
+      localStorage.setItem('winggirlAvatarIntro', JSON.stringify({ fullName, age, culture: background }));
+      setTimeout(() => document.getElementById('survey').scrollIntoView({ behavior: 'smooth', block: 'start' }), 650);
+    }
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
