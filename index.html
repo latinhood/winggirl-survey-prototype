@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WingGirl AI — Customer Survey Prototype</title>
+  <style>
+    :root {
+      --bg: #09070d;
+      --panel: rgba(255,255,255,.075);
+      --panel-2: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.14);
+      --ink: #fff8fb;
+      --muted: #b9aebd;
+      --soft: #7e7386;
+      --pink: #ff4f9a;
+      --rose: #ff8fb7;
+      --violet: #8d6bff;
+      --gold: #ffd28a;
+      --green: #65f0b4;
+      --danger: #ff6b7a;
+      --radius: 30px;
+      --shadow: 0 30px 90px rgba(0,0,0,.36);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at 15% 8%, rgba(255,79,154,.30), transparent 34rem),
+        radial-gradient(circle at 90% 14%, rgba(141,107,255,.24), transparent 34rem),
+        radial-gradient(circle at 70% 84%, rgba(255,210,138,.10), transparent 30rem),
+        linear-gradient(180deg, #09070d, #100919 46%, #070609);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .08;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+    .wrap { position: relative; width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border: 1px solid var(--line); background: rgba(12,8,18,.62); border-radius: 999px; backdrop-filter: blur(18px); }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: -.03em; }
+    .mark { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--violet)); box-shadow: 0 16px 38px rgba(255,79,154,.28); }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid rgba(255,143,183,.28); background: rgba(255,79,154,.10); color: #ffd6e6; border-radius: 999px; font-size: 13px; font-weight: 700; }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(101,240,180,.65); animation: pulse 2s infinite; }
+    .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 32px; align-items: center; margin-top: 58px; }
+    h1 { margin: 0; max-width: 760px; font-size: clamp(44px, 7vw, 82px); line-height: .94; letter-spacing: -.075em; text-wrap: balance; }
+    h1 em { font-family: var(--serif); color: var(--rose); font-weight: 400; }
+    .lede { color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.55; margin: 24px 0 0; max-width: 680px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    button, .btn { min-height: 46px; border: 0; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 22px; font: inherit; font-weight: 850; }
+    .primary { color: #190713; background: linear-gradient(135deg, #fff, #ffd6e6 36%, var(--pink)); box-shadow: 0 18px 42px rgba(255,79,154,.26); }
+    .secondary { color: var(--ink); background: rgba(255,255,255,.09); border: 1px solid var(--line); }
+    .preview-card { border-radius: 38px; padding: 16px; background: linear-gradient(150deg, rgba(255,255,255,.28), rgba(255,255,255,.06)); border: 1px solid rgba(255,255,255,.22); box-shadow: var(--shadow); }
+    .phone { min-height: 520px; border-radius: 28px; overflow: hidden; background: linear-gradient(180deg, #201329, #0d0a12); border: 1px solid rgba(255,255,255,.08); }
+    .phone-top { display: flex; align-items: center; justify-content: space-between; padding: 18px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+    .avatar-row { display: flex; align-items: center; gap: 11px; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #fff 0 5%, transparent 6%), linear-gradient(135deg, #ffb5d0, #ff4f9a 52%, #8d6bff); }
+    .status { font-size: 12px; color: var(--green); }
+    .chat { display: grid; gap: 13px; padding: 18px; }
+    .bubble { max-width: 88%; padding: 13px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; }
+    .her { background: rgba(255,255,255,.095); border-top-left-radius: 6px; }
+    .you { justify-self: end; background: linear-gradient(135deg, rgba(255,79,154,.95), rgba(141,107,255,.9)); border-top-right-radius: 6px; }
+    section { margin-top: 82px; }
+    .section-head { max-width: 760px; margin-bottom: 28px; }
+    .kicker { color: var(--rose); font-size: 13px; font-weight: 950; text-transform: uppercase; letter-spacing: .16em; }
+    h2 { margin: 12px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1; letter-spacing: -.055em; }
+    .section-head p { color: var(--muted); font-size: 18px; line-height: 1.55; margin: 18px 0 0; }
+    .survey-shell { display: grid; grid-template-columns: .78fr 1.22fr; gap: 18px; align-items: start; }
+    .sidebar, .question-card, .result-card { border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); box-shadow: 0 24px 70px rgba(0,0,0,.16); }
+    .sidebar { padding: 24px; position: sticky; top: 18px; }
+    .progress { height: 9px; background: rgba(255,255,255,.10); border-radius: 999px; overflow: hidden; margin: 18px 0 20px; }
+    .progress i { display: block; height: 100%; width: 25%; background: linear-gradient(90deg, var(--pink), var(--gold)); border-radius: inherit; transition: width .28s ease; }
+    .mini { color: var(--muted); line-height: 1.55; font-size: 14px; }
+    .question-card { padding: clamp(24px, 4vw, 42px); display: none; }
+    .question-card.active { display: block; }
+    .question-number { color: var(--gold); font-weight: 950; letter-spacing: .12em; font-size: 13px; text-transform: uppercase; }
+    .question-card h3 { margin: 14px 0 10px; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; letter-spacing: -.045em; }
+    .hint { color: var(--muted); line-height: 1.55; margin-bottom: 22px; }
+    .options { display: grid; gap: 11px; }
+    label.option { display: flex; gap: 12px; align-items: flex-start; padding: 15px; border-radius: 18px; border: 1px solid var(--line); background: rgba(255,255,255,.055); cursor: pointer; color: #ffe8f1; }
+    label.option:hover { border-color: rgba(255,143,183,.38); background: rgba(255,79,154,.09); }
+    input[type="radio"], input[type="checkbox"] { accent-color: var(--pink); margin-top: 3px; }
+    textarea, input[type="text"] { width: 100%; min-height: 110px; margin-top: 16px; resize: vertical; color: var(--ink); background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 18px; padding: 15px; outline: none; }
+    input[type="text"] { min-height: 50px; resize: none; }
+    .step-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 26px; }
+    .result-card { display: none; padding: clamp(24px, 4vw, 42px); }
+    .result-card.active { display: block; }
+    .insight-list { display: grid; gap: 12px; margin-top: 20px; }
+    .insight { padding: 16px; border-radius: 20px; background: rgba(101,240,180,.08); border: 1px solid rgba(101,240,180,.17); color: #e9fff5; line-height: 1.5; }
+    .founder-note { margin-top: 16px; padding: 18px; border-radius: 22px; border: 1px solid rgba(255,210,138,.20); background: rgba(255,210,138,.09); color: #fff3de; line-height: 1.55; }
+    .export-box { white-space: pre-wrap; color: var(--muted); background: rgba(0,0,0,.24); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-top: 18px; font-size: 13px; line-height: 1.45; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .small-card { padding: 20px; border: 1px solid var(--line); background: rgba(255,255,255,.06); border-radius: 24px; }
+    .small-card b { display: block; font-size: 18px; margin-bottom: 8px; }
+    .small-card span { color: var(--muted); line-height: 1.45; font-size: 14px; }
+    footer { margin-top: 56px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 22px; display: flex; justify-content: space-between; gap: 18px; font-size: 13px; }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 11px rgba(101,240,180,0); } 100% { box-shadow: 0 0 0 0 rgba(101,240,180,0); } }
+    @media (max-width: 900px) { .hero, .survey-shell { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .hero-actions, .step-actions, footer { flex-direction: column; } button, .btn { width: 100%; } .nav .pill { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <div class="brand"><span class="mark">♡</span> WingGirl AI Survey</div>
+      <span class="pill"><span class="pulse"></span> Chris review prototype</span>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <span class="pill"><span class="pulse"></span> Customer discovery for the virtual confidence coach</span>
+        <h1>Find out what men would actually pay for before building the bot.</h1>
+        <p class="lede">A quick 4-question survey for the WingGirl AI idea: a virtual female companion that helps men feel less lonely, practice conversation, and build real confidence with women.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#survey">Run the survey</a>
+          <a class="btn secondary" href="#how-to-use">How Chris can use it</a>
+        </div>
+      </div>
+      <div class="preview-card">
+        <div class="phone">
+          <div class="phone-top">
+            <div class="avatar-row"><div class="avatar"></div><div><strong>Luna</strong><div class="status">survey avatar · online</div></div></div>
+            <span style="color:var(--soft);font-size:13px;">4 Qs</span>
+          </div>
+          <div class="chat">
+            <div class="bubble her">Before we build the bot, I want to understand what you need most.</div>
+            <div class="bubble you">I want more confidence talking to women.</div>
+            <div class="bubble her">Perfect. I’ll ask 4 questions and turn your answers into a customer insight.</div>
+            <div class="bubble her">No judgment. Just honest answers.</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="how-to-use">
+      <div class="section-head">
+        <div class="kicker">How to use this</div>
+        <h2>Use it as a fake landing survey, interview script, or quick founder test.</h2>
+        <p>Chris can send this to potential users, or Pinky can roleplay as the customer. The page turns answers into a simple insight card that shows the strongest pain point, desired feeling, feature demand, and price sensitivity.</p>
+      </div>
+      <div class="grid-3">
+        <div class="small-card"><b>1. Ask the 4 questions</b><span>Problem, emotional desire, product value, and willingness to pay.</span></div>
+        <div class="small-card"><b>2. Watch the language</b><span>The exact words men use become landing-page copy and bot onboarding prompts.</span></div>
+        <div class="small-card"><b>3. Decide MVP</b><span>If men choose text help + confidence, build that before advanced companion features.</span></div>
+      </div>
+    </section>
+
+    <section id="survey">
+      <div class="section-head">
+        <div class="kicker">4-question survey</div>
+        <h2>Customer interview: would this man use WingGirl AI?</h2>
+        <p>Answer as the target customer. At the end, the page generates a concise summary Chris can review.</p>
+      </div>
+
+      <div class="survey-shell">
+        <aside class="sidebar">
+          <div class="kicker">Progress</div>
+          <div class="progress"><i id="bar"></i></div>
+          <p class="mini" id="progressText">Question 1 of 4</p>
+          <p class="mini">Founder goal: validate whether this is mainly a loneliness product, a confidence product, a texting coach, or a paid transformation plan.</p>
+        </aside>
+
+        <main>
+          <form id="surveyForm">
+            <article class="question-card active" data-step="1">
+              <div class="question-number">Question 01</div>
+              <h3>When you try to talk to women you like, what is the hardest part?</h3>
+              <p class="hint">This identifies the core pain: fear, overthinking, rejection, texting, or lack of practice.</p>
+              <div class="options">
+                <label class="option"><input name="problem" type="radio" value="I don’t know what to say" required> I don’t know what to say.</label>
+                <label class="option"><input name="problem" type="radio" value="I overthink and freeze"> I overthink and freeze.</label>
+                <label class="option"><input name="problem" type="radio" value="I’m afraid of rejection"> I’m afraid of rejection.</label>
+                <label class="option"><input name="problem" type="radio" value="I can start, but I can’t keep the conversation going"> I can start, but I can’t keep the conversation going.</label>
+              </div>
+              <textarea name="problem_note" placeholder="Optional: describe the last time this happened."></textarea>
+              <div class="step-actions"><span></span><button class="primary" type="button" onclick="nextStep()">Next</button></div>
+            </article>
+
+            <article class="question-card" data-step="2">
+              <div class="question-number">Question 02</div>
+              <h3>If a private virtual woman helped you, what would you want her to make you feel?</h3>
+              <p class="hint">This tells us the emotional hook: confidence, companionship, attractiveness, calmness, or motivation.</p>
+              <div class="options">
+                <label class="option"><input name="feeling" type="radio" value="More confident" required> More confident.</label>
+                <label class="option"><input name="feeling" type="radio" value="Less lonely"> Less lonely.</label>
+                <label class="option"><input name="feeling" type="radio" value="More attractive"> More attractive.</label>
+                <label class="option"><input name="feeling" type="radio" value="More relaxed when texting"> More relaxed when texting.</label>
+                <label class="option"><input name="feeling" type="radio" value="Like someone understands me"> Like someone understands me.</label>
+              </div>
+              <textarea name="feeling_note" placeholder="Optional: what would she say or do that would help?"></textarea>
+              <div class="step-actions"><button class="secondary" type="button" onclick="prevStep()">Back</button><button class="primary" type="button" onclick="nextStep()">Next</button></div>
+            </article>
+
+            <article class="question-card" data-step="3">
+              <div class="question-number">Question 03</div>
+              <h3>What would be most useful inside the app?</h3>
+              <p class="hint">Pick the feature that would make you use it every week.</p>
+              <div class="options">
+                <label class="option"><input name="feature" type="radio" value="Help me reply to women’s messages" required> Help me reply to women’s messages.</label>
+                <label class="option"><input name="feature" type="radio" value="Teach me how to flirt"> Teach me how to flirt.</label>
+                <label class="option"><input name="feature" type="radio" value="Roleplay conversations with me"> Roleplay conversations with me.</label>
+                <label class="option"><input name="feature" type="radio" value="Give me daily confidence challenges"> Give me daily confidence challenges.</label>
+                <label class="option"><input name="feature" type="radio" value="Explain how women think and feel"> Explain how women think and feel.</label>
+              </div>
+              <textarea name="feature_note" placeholder="Optional: what would make this feel valuable enough to keep using?"></textarea>
+              <div class="step-actions"><button class="secondary" type="button" onclick="prevStep()">Back</button><button class="primary" type="button" onclick="nextStep()">Next</button></div>
+            </article>
+
+            <article class="question-card" data-step="4">
+              <div class="question-number">Question 04</div>
+              <h3>If this genuinely helped you become more confident with women, would you pay?</h3>
+              <p class="hint">This tests whether the idea is entertainment, self-improvement, or a real paid transformation product.</p>
+              <div class="options">
+                <label class="option"><input name="price" type="radio" value="No, I would only use it free" required> No, I would only use it free.</label>
+                <label class="option"><input name="price" type="radio" value="Yes, around $9/month"> Yes, around $9/month.</label>
+                <label class="option"><input name="price" type="radio" value="Yes, around $19/month"> Yes, around $19/month.</label>
+                <label class="option"><input name="price" type="radio" value="Yes, around $49/month if it really worked"> Yes, around $49/month if it really worked.</label>
+                <label class="option"><input name="price" type="radio" value="I would pay only after trying it first"> I would pay only after trying it first.</label>
+              </div>
+              <input name="name" type="text" placeholder="Optional name or customer avatar label" />
+              <div class="step-actions"><button class="secondary" type="button" onclick="prevStep()">Back</button><button class="primary" type="submit">Generate insight</button></div>
+            </article>
+          </form>
+
+          <article class="result-card" id="result">
+            <div class="question-number">Customer insight</div>
+            <h3 style="font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.045em;margin:14px 0 0;">This is what the customer is really buying.</h3>
+            <div class="insight-list" id="insights"></div>
+            <div class="founder-note" id="founderNote"></div>
+            <div class="export-box" id="exportBox"></div>
+            <div class="step-actions"><button class="secondary" type="button" onclick="restart()">Run again</button><button class="primary" type="button" onclick="copySummary()">Copy summary</button></div>
+          </article>
+        </main>
+      </div>
+    </section>
+
+    <footer>
+      <div>© 2026 WingGirl AI — survey prototype for Chris review.</div>
+      <div>Not connected to a database yet. Prototype only.</div>
+    </footer>
+  </div>
+
+  <script>
+    let step = 1;
+    const total = 4;
+    const cards = [...document.querySelectorAll('.question-card')];
+    const bar = document.getElementById('bar');
+    const progressText = document.getElementById('progressText');
+    const form = document.getElementById('surveyForm');
+    const result = document.getElementById('result');
+
+    function showStep() {
+      cards.forEach(card => card.classList.toggle('active', Number(card.dataset.step) === step));
+      bar.style.width = `${(step / total) * 100}%`;
+      progressText.textContent = `Question ${step} of ${total}`;
+    }
+    function currentValid() {
+      const active = document.querySelector(`.question-card[data-step="${step}"]`);
+      const required = [...active.querySelectorAll('[required]')];
+      const names = [...new Set(required.map(i => i.name))];
+      for (const name of names) {
+        if (!form.querySelector(`[name="${name}"]:checked`)) {
+          active.querySelector(`[name="${name}"]`).reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+    function nextStep() { if (!currentValid()) return; step = Math.min(total, step + 1); showStep(); }
+    function prevStep() { step = Math.max(1, step - 1); showStep(); }
+    function val(name) { return new FormData(form).get(name) || 'Not answered'; }
+    function note(name) { return (new FormData(form).get(name) || '').trim(); }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!currentValid()) return;
+      const answers = {
+        name: val('name') === 'Not answered' ? 'Anonymous customer' : val('name'),
+        problem: val('problem'),
+        feeling: val('feeling'),
+        feature: val('feature'),
+        price: val('price'),
+        problem_note: note('problem_note'),
+        feeling_note: note('feeling_note'),
+        feature_note: note('feature_note')
+      };
+      const paid = answers.price.includes('$19') || answers.price.includes('$49');
+      const trial = answers.price.includes('trying');
+      const positioning = paid ? 'Paid transformation product' : trial ? 'Free trial → paid confidence upgrade' : 'Top-of-funnel free companion / content product';
+      const noteText = paid
+        ? 'Founder read: this customer is not only looking for entertainment. They may pay if the product proves real confidence improvement.'
+        : trial
+        ? 'Founder read: lead with a free beta or daily challenge, then upgrade after the user experiences a win.'
+        : 'Founder read: this user may consume content but needs stronger proof before paying. Use them for growth and testimonials, not early revenue.';
+
+      const insightHTML = `
+        <div class="insight"><strong>Core pain:</strong> ${answers.problem}</div>
+        <div class="insight"><strong>Emotional hook:</strong> ${answers.feeling}</div>
+        <div class="insight"><strong>MVP feature demand:</strong> ${answers.feature}</div>
+        <div class="insight"><strong>Pricing signal:</strong> ${answers.price}</div>
+        <div class="insight"><strong>Suggested positioning:</strong> ${positioning}</div>`;
+      document.getElementById('insights').innerHTML = insightHTML;
+      document.getElementById('founderNote').textContent = noteText;
+
+      const summary = `WingGirl AI customer survey\nCustomer: ${answers.name}\n\n1. Hardest part: ${answers.problem}\n${answers.problem_note ? 'Note: ' + answers.problem_note + '\n' : ''}\n2. Desired feeling: ${answers.feeling}\n${answers.feeling_note ? 'Note: ' + answers.feeling_note + '\n' : ''}\n3. Most useful feature: ${answers.feature}\n${answers.feature_note ? 'Note: ' + answers.feature_note + '\n' : ''}\n4. Willingness to pay: ${answers.price}\n\nFounder interpretation: ${positioning}\n${noteText}`;
+      document.getElementById('exportBox').textContent = summary;
+      form.style.display = 'none';
+      result.classList.add('active');
+      bar.style.width = '100%';
+      progressText.textContent = 'Survey complete';
+      localStorage.setItem('winggirlSurveyLastResult', summary);
+    });
+
+    function restart() {
+      form.reset(); result.classList.remove('active'); form.style.display = ''; step = 1; showStep();
+    }
+    async function copySummary() {
+      const text = document.getElementById('exportBox').textContent;
+      try { await navigator.clipboard.writeText(text); alert('Summary copied.'); }
+      catch { alert('Copy failed — select the summary manually.'); }
+    }
+  </script>
+</body>
+</html>
