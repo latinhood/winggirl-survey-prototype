@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WingGirl AI — Customer Survey Prototype</title>
+  <title>WingGirl AI — Avatar Dating Packages Prototype</title>
   <style>
     :root {
       --bg: #09070d;
@@ -98,6 +98,34 @@
     .founder-note { margin-top: 16px; padding: 18px; border-radius: 22px; border: 1px solid rgba(255,210,138,.20); background: rgba(255,210,138,.09); color: #fff3de; line-height: 1.55; }
     .export-box { white-space: pre-wrap; color: var(--muted); background: rgba(0,0,0,.24); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-top: 18px; font-size: 13px; line-height: 1.45; }
 
+    .market-intro { display: grid; grid-template-columns: 1fr .88fr; gap: 18px; align-items: stretch; margin-top: 28px; }
+    .package-panel { border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.045)); box-shadow: 0 24px 70px rgba(0,0,0,.18); padding: clamp(22px, 3vw, 34px); position: relative; overflow: hidden; }
+    .package-panel::after { content: ""; position: absolute; inset: auto -120px -160px auto; width: 320px; height: 320px; background: radial-gradient(circle, rgba(255,79,154,.24), transparent 67%); pointer-events: none; }
+    .package-panel h3 { margin: 10px 0 12px; font-size: clamp(28px, 4vw, 46px); line-height: 1.02; letter-spacing: -.05em; }
+    .package-panel p { color: var(--muted); line-height: 1.55; margin: 0; }
+    .package-points { display: grid; gap: 10px; margin-top: 22px; }
+    .package-point { padding: 14px 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); color: #ffe8f1; line-height: 1.45; }
+    .revenue-card { display: grid; gap: 12px; }
+    .revenue-tier { padding: 17px; border-radius: 22px; border: 1px solid var(--line); background: rgba(255,255,255,.06); }
+    .revenue-tier b { display: flex; justify-content: space-between; gap: 12px; font-size: 17px; }
+    .revenue-tier span { display: block; color: var(--muted); line-height: 1.45; margin-top: 8px; font-size: 14px; }
+    .avatar-market { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+    .dating-card { border-radius: 30px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.065); box-shadow: 0 24px 70px rgba(0,0,0,.20); position: relative; }
+    .avatar-video-wrap { position: relative; height: 360px; background: linear-gradient(180deg, rgba(255,143,183,.18), rgba(0,0,0,.20)); overflow: hidden; }
+    .avatar-video-wrap video, .avatar-video-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transform: scale(1.04); }
+    .avatar-video-wrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(9,7,13,.74)); pointer-events: none; }
+    .live-chip { position: absolute; top: 14px; left: 14px; z-index: 2; padding: 8px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; color: #07130f; background: var(--green); box-shadow: 0 10px 24px rgba(101,240,180,.22); }
+    .price-chip { position: absolute; right: 14px; bottom: 14px; z-index: 2; padding: 10px 12px; border-radius: 999px; background: rgba(0,0,0,.52); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(12px); font-weight: 950; }
+    .dating-body { padding: 20px; }
+    .dating-body h3 { display: flex; align-items: center; justify-content: space-between; margin: 0; font-size: 25px; letter-spacing: -.04em; }
+    .dating-body h3 small { color: var(--gold); font-size: 13px; letter-spacing: 0; }
+    .personality { color: var(--rose); font-weight: 900; margin: 7px 0 12px; }
+    .traits { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .trait { padding: 7px 9px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #ffe8f1; font-size: 12px; font-weight: 800; }
+    .upsell { margin-top: 14px; padding: 14px; border-radius: 18px; background: rgba(255,210,138,.09); border: 1px solid rgba(255,210,138,.20); color: #fff3de; font-size: 14px; line-height: 1.45; }
+    .choose-row { display: flex; gap: 10px; margin-top: 16px; }
+    .choose-row .btn { flex: 1; min-height: 42px; padding: 0 14px; font-size: 14px; text-decoration: none; }
+
     .avatar-stage { display: grid; grid-template-columns: .92fr 1.08fr; gap: 18px; align-items: stretch; }
     .character-card, .intro-chat { border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); box-shadow: 0 24px 70px rgba(0,0,0,.16); overflow: hidden; }
     .character-card { position: relative; min-height: 560px; display: grid; place-items: end center; padding: 28px; background: radial-gradient(circle at 50% 20%, rgba(255,143,183,.22), transparent 22rem), linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035)); }
@@ -128,50 +156,127 @@
     .small-card span { color: var(--muted); line-height: 1.45; font-size: 14px; }
     footer { margin-top: 56px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 22px; display: flex; justify-content: space-between; gap: 18px; font-size: 13px; }
     @keyframes pulse { 70% { box-shadow: 0 0 0 11px rgba(101,240,180,0); } 100% { box-shadow: 0 0 0 0 rgba(101,240,180,0); } }
-    @media (max-width: 900px) { .hero, .survey-shell, .avatar-stage { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .hero, .survey-shell, .avatar-stage, .market-intro { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } .grid-3, .avatar-market { grid-template-columns: 1fr; } .avatar-video-wrap { height: 420px; } }
     @media (max-width: 560px) { .hero-actions, .step-actions, footer, .identity-grid { flex-direction: column; } .identity-grid { display: grid; grid-template-columns: 1fr; } button, .btn { width: 100%; } .nav .pill { display:none; } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <nav class="nav">
-      <div class="brand"><span class="mark">♡</span> WingGirl AI Survey</div>
+      <div class="brand"><span class="mark">♡</span> WingGirl AI Packages</div>
       <span class="pill"><span class="pulse"></span> Chris review prototype</span>
     </nav>
 
     <header class="hero">
       <div>
-        <span class="pill"><span class="pulse"></span> Customer discovery for the virtual confidence coach</span>
-        <h1>Find out what men would actually pay for before building the bot.</h1>
-        <p class="lede">A quick 4-question survey for the WingGirl AI idea: a virtual female companion that helps men feel less lonely, practice conversation, and build real confidence with women.</p>
+        <span class="pill"><span class="pulse"></span> Avatar dating packages · customer discovery</span>
+        <h1>Sell the fantasy, then validate which avatar package men would pay more for.</h1>
+        <p class="lede">A product prototype for a dating-style companion app: users choose different virtual girlfriends, personalities, desires, and premium features — then the survey reveals what they actually value enough to buy.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#avatar-intro">Talk to Luna</a>
-          <a class="btn secondary" href="#how-to-use">How Chris can use it</a>
+          <a class="btn primary" href="#packages">View avatar packages</a>
+          <a class="btn secondary" href="#avatar-intro">Talk to Luna</a>
         </div>
       </div>
       <div class="preview-card">
         <div class="phone">
           <div class="phone-top">
             <div class="avatar-row"><div class="avatar"></div><div><strong>Luna</strong><div class="status">survey avatar · online</div></div></div>
-            <span style="color:var(--soft);font-size:13px;">4 Qs</span>
+            <span style="color:var(--soft);font-size:13px;">Packages</span>
           </div>
           <div class="chat">
-            <div class="bubble her">Before we build the bot, I want to understand what you need most.</div>
-            <div class="bubble you">I want more confidence talking to women.</div>
-            <div class="bubble her">Perfect. I’ll ask 4 questions and turn your answers into a customer insight.</div>
-            <div class="bubble her">No judgment. Just honest answers.</div>
+            <div class="bubble her">Choose the type of girlfriend experience you want first.</div>
+            <div class="bubble you">I want someone warm, flirty, and realistic.</div>
+            <div class="bubble her">Perfect. Different avatars can unlock different personalities, desires, and coaching styles.</div>
+            <div class="bubble her">Then we validate what you would pay for.</div>
           </div>
         </div>
       </div>
     </header>
 
 
+    <section id="packages">
+      <div class="section-head">
+        <div class="kicker">Dating app package model</div>
+        <h2>Users choose the type of virtual girlfriend they want before they enter the survey.</h2>
+        <p>This makes the business model clearer: the avatar is not just decoration — she becomes the product tier. More realistic, more human, more specific personalities can command higher prices.</p>
+      </div>
+
+      <div class="market-intro">
+        <div class="package-panel">
+          <div class="kicker">Background logic</div>
+          <h3>Package the desire, not only the chatbot.</h3>
+          <p>The app can sell different companion archetypes. Each one has a visible personality, emotional promise, and feature bundle. The customer feels like they are choosing an experience, not filling out a form.</p>
+          <div class="package-points">
+            <div class="package-point"><strong>Base product:</strong> text support, dating advice, confidence prompts.</div>
+            <div class="package-point"><strong>Premium product:</strong> more humanized avatars, animated video-call style presence, flirt practice, personalized memory.</div>
+            <div class="package-point"><strong>High-ticket product:</strong> transformation plan, daily challenges, voice/video presence, advanced girlfriend personality packs.</div>
+          </div>
+        </div>
+        <div class="revenue-card">
+          <div class="revenue-tier"><b>Starter <span>$9/mo</span></b><span>Basic companion chat, simple advice, light confidence support.</span></div>
+          <div class="revenue-tier"><b>Plus <span>$19/mo</span></b><span>Animated avatar, personality matching, texting help, weekly challenges.</span></div>
+          <div class="revenue-tier"><b>Elite <span>$49/mo</span></b><span>Most realistic avatar, deeper memory, roleplay, emotional support, direct coaching.</span></div>
+        </div>
+      </div>
+
+      <div class="avatar-market">
+        <article class="dating-card">
+          <div class="avatar-video-wrap">
+            <span class="live-chip">Animated</span>
+            <video autoplay muted loop playsinline poster="https://v3b.fal.media/files/b/0a9d36ad/l-0dsrXGLlafTBBbL7HDy_GhbhpWWI.png"><source src="https://v3b.fal.media/files/b/0a9d36b2/lCowSHbslcU3XA0DvM00x_output.mp4" type="video/mp4"></video>
+            <div class="price-chip">Plus · $19/mo</div>
+          </div>
+          <div class="dating-body">
+            <h3>Luna <small>Warm</small></h3>
+            <div class="personality">Sweet, direct, emotionally safe.</div>
+            <p class="mini">For men who want confidence, reassurance, and a companion who feels close face-to-face.</p>
+            <div class="traits"><span class="trait">Confidence</span><span class="trait">Soft flirting</span><span class="trait">Daily check-ins</span></div>
+            <div class="upsell"><strong>Premium desire:</strong> she remembers your fears and helps you practice before real conversations.</div>
+            <div class="choose-row"><a class="btn primary" href="#avatar-intro">Choose Luna</a></div>
+          </div>
+        </article>
+
+        <article class="dating-card">
+          <div class="avatar-video-wrap">
+            <span class="live-chip">Animated</span>
+            <video autoplay muted loop playsinline poster="https://v3b.fal.media/files/b/0a9d36ad/W5M0iewoO0chkRC2ybFJ7_j54hFzI1.png"><source src="https://v3b.fal.media/files/b/0a9d36b6/BmFuKnk07zZLJR-fwDCt6_output.mp4" type="video/mp4"></video>
+            <div class="price-chip">Elite · $49/mo</div>
+          </div>
+          <div class="dating-body">
+            <h3>Amara <small>Confident</small></h3>
+            <div class="personality">Elegant, challenging, high-standard.</div>
+            <p class="mini">For men who want to be pushed, sharpened, and trained to lead conversations better.</p>
+            <div class="traits"><span class="trait">Roleplay</span><span class="trait">Masculine frame</span><span class="trait">Accountability</span></div>
+            <div class="upsell"><strong>Premium desire:</strong> she gives direct feedback and turns dating into a transformation plan.</div>
+            <div class="choose-row"><a class="btn primary" href="#avatar-intro">Choose Amara</a></div>
+          </div>
+        </article>
+
+        <article class="dating-card">
+          <div class="avatar-video-wrap">
+            <span class="live-chip">Animated</span>
+            <video autoplay muted loop playsinline poster="https://v3b.fal.media/files/b/0a9d36b2/sdmidgjgcRVSqRFDaSptt_9oq8Nq2o.png"><source src="https://v3b.fal.media/files/b/0a9d36b9/hpQ8Z_caJQk4BR-s8hBDW_output.mp4" type="video/mp4"></video>
+            <div class="price-chip">Plus · $29/mo</div>
+          </div>
+          <div class="dating-body">
+            <h3>Sofia <small>Playful</small></h3>
+            <div class="personality">Flirty, witty, social-energy coach.</div>
+            <p class="mini">For men who want texting help, banter practice, and a more playful dating personality.</p>
+            <div class="traits"><span class="trait">Text replies</span><span class="trait">Banter</span><span class="trait">Social game</span></div>
+            <div class="upsell"><strong>Premium desire:</strong> she helps create messages and practice chemistry before dates.</div>
+            <div class="choose-row"><a class="btn primary" href="#avatar-intro">Choose Sofia</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
 
     <section id="avatar-intro">
       <div class="section-head">
-        <div class="kicker">Meet the avatar</div>
-        <h2>Luna appears on screen and starts the customer conversation.</h2>
-        <p>This is the first interaction before the survey: the character asks for full name, age, and cultural background so the experience feels personal from the first moment.</p>
+        <div class="kicker">Personal onboarding</div>
+        <h2>After choosing a package, the avatar starts the face-to-face conversation.</h2>
+        <p>The character asks for full name, age, and cultural background so the experience feels personal, humanized, and close — like speaking to someone from the chest up on a video call.</p>
       </div>
       <div class="avatar-stage">
         <div class="character-card" aria-label="Luna avatar character">
